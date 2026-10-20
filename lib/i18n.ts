@@ -93,6 +93,11 @@ export const UI = {
   undo: { ja: "元に戻す", en: "Undo", zh: "撤销" },
   redo: { ja: "やり直す", en: "Redo", zh: "重做" },
   clearAll: { ja: "すべて消す", en: "Clear canvas", zh: "全部清除" },
+  tools: { ja: "ツール", en: "Tools", zh: "工具" },
+  multiSelect: { ja: "複数選択", en: "Multi-select", zh: "多选" },
+  copyParts: { ja: "部品をコピー", en: "Copy parts", zh: "复制部件" },
+  pasteParts: { ja: "部品を貼り付け", en: "Paste parts", zh: "粘贴部件" },
+  shareLink: { ja: "リンクを共有", en: "Share link", zh: "分享链接" },
   clearAllTitle: { ja: "すべて消しますか？", en: "Clear the canvas?", zh: "要全部清除吗？" },
   clearAllBody: {
     ja: "すべての画面と部品を削除します。元に戻す (Ctrl+Z) で復元できます。",
@@ -347,7 +352,7 @@ export const UI = {
   phoneFrame: { ja: "スマホ", en: "Phone", zh: "手机" },
   desktopFrame: { ja: "デスクトップ", en: "Desktop", zh: "桌面" },
   // mobile
-  mobileNote: { ja: "フル機能は PC のブラウザで使えます", en: "Full features on a desktop browser", zh: "完整功能请在电脑浏览器中使用" },
+  mobileNote: { ja: "部品・画面・ツールから編集できます", en: "Open Parts, Screens or Tools to edit", zh: "打开部件、画面或工具进行编辑" },
   addButton: { ja: "ボタンを追加", en: "Add button", zh: "添加按钮" },
   done: { ja: "完了", en: "Done", zh: "完成" },
   theme: { ja: "テーマ", en: "Theme", zh: "主题" },
@@ -490,6 +495,7 @@ export type UIKey = keyof typeof UI;
 
 /** exported for the parity tests only; read strings through t() */
 export const KO: Record<UIKey, string> = {
+  tools: "도구", multiSelect: "다중 선택", copyParts: "부품 복사", pasteParts: "부품 붙여넣기",
   frameSize: "화면 크기", phoneFrame: "휴대전화", desktopFrame: "데스크톱", columnWidth: "휴대전화 한 화면 너비", cornerLeft: "왼쪽 모서리", cornerRight: "오른쪽 모서리", cornersEach: "모서리별로 지정", cornerTl: "왼쪽 위", cornerTr: "오른쪽 위", cornerBl: "왼쪽 아래", cornerBr: "오른쪽 아래",
   filled: "채움", tonal: "색조", elevated: "그림자", outlined: "윤곽선", standard: "표준", vibrant: "선명함",
   styleSurface: "표준", stylePrimary: "기본색", styleSecondary: "보조색",
@@ -498,7 +504,7 @@ export const KO: Record<UIKey, string> = {
   search: "검색", favorites: "즐겨찾기", addFavorite: "즐겨찾기에 추가", removeFavorite: "즐겨찾기에서 제거", clear: "지우기", language: "언어",
   select: "선택", hand: "손 도구", blank: "빈 캔버스", phone: "휴대전화 화면", addFrame: "화면 추가", preview: "미리보기",
   zoomIn: "확대", zoomOut: "축소", fit: "전체 맞춤", undo: "실행 취소", redo: "다시 실행",
-  clearAll: "모두 지우기", clearAllTitle: "캔버스를 비울까요?", clearAllBody: "모든 화면과 부품을 삭제합니다. 실행 취소(Ctrl+Z)로 복원할 수 있습니다.",
+  clearAll: "모두 지우기", shareLink: "링크 공유", clearAllTitle: "캔버스를 비울까요?", clearAllBody: "모든 화면과 부품을 삭제합니다. 실행 취소(Ctrl+Z)로 복원할 수 있습니다.",
   screen: "화면", screenName: "화면 이름", name: "이름", background: "배경", export: "내보내기", project: "프로젝트",
   saveProject: "프로젝트 저장", openProject: "프로젝트 열기", replaceProjectTitle: "이 프로젝트를 열까요?",
   replaceProject: "현재 캔버스가 교체됩니다. 실행 취소(Ctrl+Z)로 되돌릴 수 있습니다.",
@@ -543,7 +549,7 @@ export const KO: Record<UIKey, string> = {
   noLayers: "이 화면에는 아직 부품이 없습니다", showParts: "안의 부품 표시", hideParts: "안의 부품 숨기기", lock: "잠금", unlock: "잠금 해제", lockedGroup: "잠긴 그룹입니다. 먼저 레이어 패널에서 잠금을 해제하세요", lockedKept: "잠긴 그룹의 부품은 삭제하지 않고 남겼습니다", lockedEdit: "잠금 중입니다. 스위치로 해제",
   brief: "이 앱에 대한 설명…", appName: "앱 이름", targetPlatform: "구현 대상", targetAndroid: "Android 네이티브 앱으로 만들기",
   targetWeb: "브라우저에서 실행되는 웹 앱으로 만들기", copyPrompt: "프롬프트 복사", back: "뒤로", close: "닫기", cancel: "취소", ok: "확인",
-  leading: "앞쪽", trailing: "뒤쪽", title: "제목", body: "본문", message: "메시지", placeholder: "자리 표시자", regular: "보통 굵기", typeBody: "본문", typeTitle: "제목", typeHeadline: "헤드라인", typeDisplay: "디스플레이", home: "홈", screenN: "화면", copySuffix: " 복사본", mobileNote: "전체 기능은 데스크톱 브라우저에서 사용할 수 있습니다",
+  leading: "앞쪽", trailing: "뒤쪽", title: "제목", body: "본문", message: "메시지", placeholder: "자리 표시자", regular: "보통 굵기", typeBody: "본문", typeTitle: "제목", typeHeadline: "헤드라인", typeDisplay: "디스플레이", home: "홈", screenN: "화면", copySuffix: " 복사본", mobileNote: "부품, 화면 또는 도구를 열어 편집하세요",
   addButton: "버튼 추가", done: "완료", theme: "테마", settings: "테마 및 설정", shape: "모양", typography: "글꼴", motion: "모션",
   brightness: "밝기", light: "라이트", dark: "다크", contrast: "대비", bothModes: "둘 다", contrastStandard: "표준", contrastMedium: "중간", contrastHigh: "높음",
   design: "디자인", trigger: "트리거", noteDialog: "버튼 사양", partSpec: "이 부품의 사양", toggleLookHint: "디자인 탭에서 설정할 수 있습니다", addFrameHint: "화면을 추가하면 여기서 이동을 설정할 수 있습니다",

@@ -308,7 +308,9 @@ export function PromptPanel({
   palette: p,
   onDoc,
   onCover,
+  mobile = false,
 }: {
+  mobile?: boolean;
   doc: Doc;
   widths: Record<string, number>;
   palette: Palette;
@@ -446,6 +448,29 @@ export function PromptPanel({
       p={p}
       height={40}
     />
+  );
+
+  if (mobile) return (
+    <div style={{ height: "100%", minHeight: 0, display: "flex", flexDirection: "column", gap: 8, padding: "0 4px" }}>
+      {platform}
+      <details style={{ flex: "0 0 auto", maxHeight: "40%", overflowY: "auto" }}>
+        <summary style={{ padding: "8px 4px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>{t("project", lang)}</summary>
+        <div style={{ display: "grid", gap: 6, paddingBottom: 8 }}>
+          <Field value={doc.title} onChange={(title) => onDoc({ title })} placeholder={t("appName", lang)} p={p} icon="smartphone" />
+          <FadeArea value={doc.brief} onChange={(brief) => onDoc({ brief })} placeholder={t("brief", lang)} p={p} rows={2} />
+        </div>
+      </details>
+      <details style={{ flex: "0 0 auto", maxHeight: "30%", overflowY: "auto" }}>
+        <summary style={{ padding: "8px 4px", cursor: "pointer", fontSize: 13 }}>{t("screens", lang)}</summary>
+        <Outline marks={marks} current={lit} onPick={pick} p={p} />
+      </details>
+      <PromptBox text={text} starts={starts} marks={marks} lit={lit} jump={jump}
+        onText={(promptEdit) => onDoc({ promptEdit })} onCaret={caret} p={p} areaRef={area}
+        corner={<div style={{ display: "flex", width: "100%", justifyContent: "flex-end", alignItems: "center" }}>
+          {edited && <IconBtn icon="restart_alt" p={p} size={44} onClick={() => onDoc({ promptEdit: undefined })} title={t("promptReset", lang)} />}
+          <span style={{ flex: 1 }} /><CopyButton copied={copied} onClick={copy} p={p} />
+        </div>} />
+    </div>
   );
 
   return (

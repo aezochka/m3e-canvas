@@ -157,30 +157,8 @@ export function Toolbar({
           <IconBtn icon="redo" p={p} onClick={onRedo} disabled={!canRedo} title={t("redo", lang)} size={S} />
           <IconBtn icon="translate" p={p} onClick={onLangSheet} title={t("language", lang)} size={S} />
           <IconBtn icon="palette" p={p} onClick={onSettings} title={t("settings", lang)} size={S} />
-          <GitHubLink p={p} size={S} />
-          <button
-            onClick={onPrompt}
-            title={t("copyPrompt", lang)}
-            className="m3-press"
-            style={{
-              height: S,
-              padding: "0 14px 0 10px",
-              borderRadius: S / 2,
-              border: "none",
-              background: p.primary,
-              color: p.onPrimary,
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              whiteSpace: "nowrap",
-            }}
-          >
-            <Icon name="auto_awesome" size={22} />
-            {t("prompt", lang)}
-          </button>
+          <IconBtn icon="fit_screen" p={p} onClick={onFit} title={t("fit", lang)} size={S} />
+          <IconBtn icon="play_arrow" p={p} onClick={onPreview} title={t("preview", lang)} size={S} />
         </Pill>
       </div>
     );

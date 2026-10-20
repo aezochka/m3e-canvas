@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useDragControls } from "motion/react";
-import { CONTRASTS, Contrast, FONTS, Item, KIND_SPEC, NavTab, PALETTES, Palette, SHAPES, ShapeScale, Theme, defaultTabsFor, iconSlotsOf, setIconSlot } from "@/lib/tokens";
+import { CONTRASTS, Contrast, FONTS, Frame, Item, KIND_SPEC, NavTab, PALETTES, Palette, SHAPES, ShapeScale, Theme, defaultTabsFor, iconSlotsOf, setIconSlot } from "@/lib/tokens";
 import { ensureFontLoaded } from "@/lib/theme";
 import { KIND_TEXT, LANGS, Lang, t, useLang } from "@/lib/i18n";
 import { IconPicker } from "./IconPicker";
@@ -10,16 +10,59 @@ import { Icon } from "./M3Node";
 import { VariantSwatch, variantsOf } from "./Inspector";
 import { Field, IconBtn, Segmented, Toggle } from "./ui";
 
+function MobileAction({ icon, label, p, onClick }: { icon: string; label: string; p: Palette; onClick: () => void }) {
+  return <button onClick={onClick} aria-label={label} className="m3-press" style={{ minHeight: 52, flex: 1, border: 0, borderRadius: 18, background: p.surfaceContainerHigh, color: p.onSurface, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}><Icon name={icon} size={21} />{label}</button>;
+}
+
+export function MobileToolBar({ p, onParts, onScreens, onPrompt, onProject }: { p: Palette; onParts: () => void; onScreens: () => void; onPrompt: () => void; onProject: () => void }) {
+  const lang = useLang();
+  return <div style={{ position: "absolute", top: 0, left: 10, right: 10, display: "flex", gap: 6, padding: 6, borderRadius: 24, background: p.surface, boxShadow: "0 3px 14px #0002", pointerEvents: "auto" }}>
+    <MobileAction icon="widgets" label={t("parts", lang)} p={p} onClick={onParts} />
+    <MobileAction icon="smartphone" label={t("screens", lang)} p={p} onClick={onScreens} />
+    <MobileAction icon="description" label={t("prompt", lang)} p={p} onClick={onPrompt} />
+    <MobileAction icon="build" label={t("tools", lang)} p={p} onClick={onProject} />
+  </div>;
+}
+
+export function MobileScreens({ palette: p, frames, selectedId, onSelect, onAdd, onPreview }: { palette: Palette; frames: Frame[]; selectedId: string | null; onSelect: (id: string) => void; onAdd: () => void; onPreview: () => void }) {
+  const lang = useLang();
+  return <div style={{ height: "100%", overflowY: "auto" }}>
+    <Row icon="smartphone" label={t("screens", lang)} p={p}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {frames.map((frame, index) => <button key={frame.id} onClick={() => onSelect(frame.id)} aria-pressed={frame.id === selectedId} className="m3-press" style={{ minHeight: 54, border: 0, borderRadius: 18, padding: "0 14px", background: frame.id === selectedId ? p.secondaryContainer : p.surfaceContainerHigh, color: frame.id === selectedId ? p.onSecondaryContainer : p.onSurface, display: "flex", alignItems: "center", gap: 10, textAlign: "left", fontSize: 14, fontWeight: 600 }}><Icon name="smartphone" size={22}/><span style={{flex:1}}>{frame.name || `${t("screenN", lang)} ${index + 1}`}</span>{frame.id === selectedId && <Icon name="check" size={20}/>}</button>)}
+        <button onClick={onAdd} className="m3-press" style={{ minHeight: 52, border: `1px solid ${p.outline}`, borderRadius: 26, background: "transparent", color: p.primary, fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}><Icon name="add" size={21}/>{t("addFrame", lang)}</button>
+        <button onClick={onPreview} className="m3-press" style={{ minHeight: 52, border: 0, borderRadius: 26, background: p.primary, color: p.onPrimary, fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}><Icon name="play_arrow" size={21}/>{t("preview", lang)}</button>
+      </div>
+    </Row>
+  </div>;
+}
+
+export function MobileProject({ palette: p, onSave, onOpen, onShare, onClear }: { palette: Palette; onSave: () => void; onOpen: () => void; onShare: () => void; onClear: () => void }) {
+  const lang = useLang();
+  return <Row icon="folder_open" label={t("project", lang)} p={p}><div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+    <MobileAction icon="download" label={t("saveProject", lang)} p={p} onClick={onSave}/>
+    <MobileAction icon="upload" label={t("openProject", lang)} p={p} onClick={onOpen}/>
+    <MobileAction icon="share" label={t("shareLink", lang)} p={p} onClick={onShare}/>
+    <MobileAction icon="delete_sweep" label={t("clearAll", lang)} p={p} onClick={onClear}/>
+  </div></Row>;
+}
+
 /** Sheet that slides up from the bottom edge; the canvas above stays usable.
  *  Dragging the handle moves the sheet with the finger; a flick or a long pull closes it. */
 export function BottomSheet({ p, onClose, children }: { p: Palette; onClose: () => void; children: React.ReactNode }) {
   const lang = useLang();
   const controls = useDragControls();
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => { if (e.key === "Escape") { e.stopPropagation(); onClose(); } };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [onClose]);
   return (
     <motion.div
+      role="dialog" aria-label={t("tools", lang)} data-testid="mobile-sheet"
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
-      exit={{ y: "100%" }}
+      exit={{ y: "100%", pointerEvents: "none" }}
       transition={{ type: "spring", stiffness: 420, damping: 38, mass: 0.8 }}
       drag="y"
       dragListener={false}
@@ -35,7 +78,10 @@ export function BottomSheet({ p, onClose, children }: { p: Palette; onClose: () 
         left: 0,
         right: 0,
         bottom: 0,
-        maxHeight: "72%",
+        height: "min(76%, 720px)",
+        maxHeight: "calc(var(--app-h, 100dvh) - 68px)",
+        minHeight: 0,
+        overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         borderTopLeftRadius: 28,
@@ -51,7 +97,7 @@ export function BottomSheet({ p, onClose, children }: { p: Palette; onClose: () 
         onPointerDown={(e) => controls.start(e)}
         aria-label={t("close", lang)}
         style={{
-          height: 30,
+          height: 44,
           border: "none",
           background: "transparent",
           display: "grid",
@@ -63,7 +109,7 @@ export function BottomSheet({ p, onClose, children }: { p: Palette; onClose: () 
       >
         <span style={{ width: 32, height: 4, borderRadius: 2, background: p.outlineVariant }} />
       </button>
-      <div className="no-scrollbar" style={{ overflowY: "auto", padding: "0 14px 16px", minHeight: 0 }}>
+      <div className="mobile-sheet-content" style={{ flex: 1, overflow: "hidden", padding: "0 8px 8px", minHeight: 0 }}>
         {children}
       </div>
     </motion.div>

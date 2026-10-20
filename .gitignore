@@ -47,3 +47,7 @@ next-env.d.ts
 
 # promo video project (kept private)
 /promo
+
+# Browser verification artifacts
+/test-results/
+/PHASE.md

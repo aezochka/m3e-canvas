@@ -18,7 +18,9 @@ export function PartsPalette({
   onToggleFavorite,
   onPartPointerDown,
   onPartActivate,
+  tapToAdd = false,
 }: {
+  tapToAdd?: boolean;
   palette: Palette;
   favorites: Kind[];
   onToggleFavorite: (k: Kind) => void;
@@ -49,7 +51,7 @@ export function PartsPalette({
         icon={s.paletteIcon}
         label={labelOf(k)}
         p={p}
-        onPointerDown={(e) => onPartPointerDown(e, k)}
+        onPointerDown={tapToAdd ? undefined : (e) => onPartPointerDown(e, k)}
         onClick={() => onPartActivate(k)}
         starred={favorites.includes(k)}
         onStar={() => onToggleFavorite(k)}

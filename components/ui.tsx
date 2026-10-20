@@ -1532,7 +1532,7 @@ export function Tile({
           color: active ? p.onSecondaryContainer : p.onSurface,
           cursor: onPointerDown ? "grab" : "pointer",
           userSelect: "none",
-          touchAction: "none",
+          touchAction: onPointerDown ? "none" : "pan-y",
           minHeight: compact ? 40 : 72,
           boxSizing: "border-box",
         }}

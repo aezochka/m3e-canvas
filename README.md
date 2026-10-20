@@ -74,7 +74,7 @@ M3E Canvas is a free, open-source sketchpad for app screens made of real Materia
 - **AI helper (optional)** – bring your own key for OpenAI, Claude, Gemini or DeepSeek to draft a design from a sentence or write a part's behaviour note and a screen's description. Every rewrite can be undone. The request goes straight from your browser to the provider.
 - **Share links** – copy a link that opens your design on anyone's canvas, or an instruction for Claude Code, Codex or another agent: it reads [agent.md](public/agent.md), sketches what you described, and replies with such a link.
 - **Everything else** – alignment guides and a 4dp grid, undo and redo, keyboard shortcuts, a keyboard-usable parts panel, favorites, install as an app, and autosave in your browser.
-- **On a phone** – one fixed screen and a buttons-only editor with bottom sheets. The full editor is for desktop browsers.
+- **On a phone** – the complete editor in touch-friendly sheets: the full component catalog, shared inspectors, multiple screens, layers, themes, AI settings, editable prompts and project/image export. See [mobile controls and verification](docs/mobile.md).
 
 </details>
 
